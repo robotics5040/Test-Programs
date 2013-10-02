@@ -60,11 +60,11 @@ void forward(int power, int distance)
 
 	if(distance != 0)
 	{
-		nMotorEncoder[motorF] = 0;
+		nMotorEncoder[rightMotor] = 0;
 		bool go = true;
 		while (go)
 		{
-			if (nMotorEncoder[motorF] * ((PI * 10.16) / 360) >= distance)
+			if (nMotorEncoder[rightMotor] * ((PI * 10.16) / 360) >= distance)
 				go = false;
 		}
 		motor[rightMotor] = 0;
@@ -80,11 +80,11 @@ void turn(int powL, int powR, int distance)
 
 	if(distance != 0)
 	{
-		nMotorEncoder[motorF] = 0;
+		nMotorEncoder[rightMotor] = 0;
 		bool go = true;
 		while (go)
 		{
-			if (nMotorEncoder[motorF] * ((PI * 10.16) / 360) >= distance)
+			if (nMotorEncoder[rightMotor] * ((PI * 10.16) / 360) >= distance)
 				go = false;
 		}
 		motor[rightMotor] = 0;
@@ -95,6 +95,7 @@ void turn(int powL, int powR, int distance)
 task main()
 {
   initializeRobot();
+  nMotorEncoder[leftMotor] = 0;
 
   //Find IR
 	while(SensorValue(IRSeeker) != 9)
@@ -103,14 +104,39 @@ task main()
 	}
 	forward(0, 0);
 
+	int rotated = nMotorEncoder[leftMotor];
+
   //Align and drop
 	while(SensorValue(IRSeeker) != 5)
 		turn(70, -70, 0);
 	wait10Msec(15);
 	forward(0, 0);
-	//TODO: Prepare arm
+	motor[armMotor] = 40;
+	wait10Msec(60);
+	motor[armMotor] = 0;
 	forward(50, 0); //When ported to our robot, try distance calculator rather than time
-	wait10Msec(30);
+	wait10Msec(100);
+	forward(0, 0);
+	motor[gripperMotor] = -40; // Release cube
+	wait10Msec(50);
+
+	//Retrace steps
+	forward(-50, 0);
+	wait10Msec(130);
+	forward(0, 0);
+	motor[gripperMotor] = 0;
+	motor[armMotor] = -40;
+	wait10Msec(60);
+	motor[armMotor] = 0;
+	if(rotated > -6500)
+		while(SensorValue(IRSeeker) != 1)
+			turn(-70, 70, 0);
+	else
+		while(SensorValue(IRSeeker) != 9)
+			turn(70, -70, 0);
 
   //Get to ramp
+	//forward(-70, 4);
+	//if(rotated > -6500)
+		//turn(-70, 70, 3);
 }
