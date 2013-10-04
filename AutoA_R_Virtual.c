@@ -136,7 +136,5 @@ task main()
 			turn(70, -70, 0);
 
   //Get to ramp
-	//forward(-70, 4);
-	//if(rotated > -6500)
-		//turn(-70, 70, 3);
+	//MAKE AUTONOMOUS B FIRST THEN COMBINE
 }

@@ -79,19 +79,28 @@ task main()
 {
   initializeRobot();
 
-  waitForStart(); // Wait for the beginning of autonomous phase.
-
   while (SensorValue[light] < 90)
   	forward(60, 0);
+ turn(-20, 50, 0);
+ wait10Msec(80);
 
-	nMotorEncoder[motorF] = 0;
-
-	while (nMotorEncoder[leftMotor] != 50)
+	while (SensorValue[light] < 50)
 	{
-		if (SensorValue[light] == 0)
-			forward(70, 0);
-		else
-			turn(-50, 50, 0);
+		forward(70, 0);
+
+		if (SensorValue[sonar] < 25)
+		{
+			turn(-40, 60, 45);
+			while (SensorValue[light] != 0)
+		  	forward(60, 0);
+		}
+	}
+
+	nMotorEncoder[leftMotor] = 0;
+
+	while (nMotorEncoder[leftMotor] < -2000)
+	{
+		forward(70, 0);
 
 		if (SensorValue[sonar] < 25)
 		{
