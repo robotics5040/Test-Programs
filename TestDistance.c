@@ -1,13 +1,14 @@
 #pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  HTMotor)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     SensorIR,       sensorHiTechnicIRSeeker1200)
 #pragma config(Sensor, S3,     SensorColor,    sensorCOLORFULL)
 #pragma config(Sensor, S4,     SensorSonic,    sensorSONAR)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_1,     motorF,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_2,     motorG,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_1,     motorH,        tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     motorI,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     motorF,        tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C3_2,     motorG,        tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C4_1,     motorH,        tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C4_2,     motorI,        tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C2_1,    servo1,               tServoNone)
 #pragma config(Servo,  srvo_S1_C2_2,    servo2,               tServoNone)
 #pragma config(Servo,  srvo_S1_C2_3,    servo3,               tServoNone)
@@ -19,18 +20,17 @@
 task main()
 {
 
-	motor[motorF] = 80;
-	motor[motorG] = 80;
-	motor[motorH] = 80;
-	motor[motorI] = 80;
-	int distance = 720;
-
 	nMotorEncoder[motorF] = 0;
-	bool go = true;
-	while (go)
+
+	int distance = 30;
+	//while ((nMotorEncoder[motorF]/360) * (PI * 5) > distance * -1)
+	while (69 * distance > nMotorEncoder[motorF] * -1)
 	{
-		if (nMotorEncoder[motorF] * (PI * 10.16) >= distance)
-			go = false;
+		int enc = nMotorEncoder[motorF];
+		motor[motorF] = 20;
+		motor[motorG] = 20;
+		motor[motorH] = 20;
+		motor[motorI] = 20;
 	}
 	motor[motorF] = 0;
 	motor[motorG] = 0;
