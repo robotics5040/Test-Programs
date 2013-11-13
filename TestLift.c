@@ -1,7 +1,7 @@
 #pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  HTMotor)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     SensorIR,       sensorHiTechnicIRSeeker1200)
-#pragma config(Sensor, S3,     SensorColor,    sensorCOLORFULL)
+#pragma config(Sensor, S3,     SensorColor,    sensorI2CHiTechnicColor)
 #pragma config(Sensor, S4,     SensorSonic,    sensorSONAR)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
@@ -25,10 +25,10 @@ task main()
 	while(nNxtButtonPressed != 0)
 	{
 		if(nNxtButtonPressed == 2)
-			motor[motorE] = 65;
+			motor[motorE] = 40;
 		else
 			if(nNxtButtonPressed == 1)
-				motor[motorE] = -65;
+				motor[motorE] = -40;
 			else
 				motor[motorE] = 0;
 		if(nNxtButtonPressed == 3)
