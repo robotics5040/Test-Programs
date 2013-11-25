@@ -1,7 +1,7 @@
 #pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  HTMotor)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     SensorIR,       sensorHiTechnicIRSeeker1200)
-#pragma config(Sensor, S3,     SensorColor,    sensorCOLORFULL)
+#pragma config(Sensor, S3,     SensorColor,    sensorI2CHiTechnicColor)
 #pragma config(Sensor, S4,     SensorSonic,    sensorSONAR)
 #pragma config(Motor,  mtr_S1_C1_1,     motorD,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorTetrix, openLoop)
@@ -20,21 +20,14 @@
 task main()
 {
 
-	nMotorEncoder[motorF] = 0;
-
-	int distance = 30;
-	//while ((nMotorEncoder[motorF]/360) * (PI * 5) > distance * -1)
-	while (69 * distance > nMotorEncoder[motorF])
+	while (true)
 	{
-		int enc = nMotorEncoder[motorF];
-		motor[motorF] = 20;
-		motor[motorG] = 20;
-		motor[motorH] = 20;
-		motor[motorI] = 20;
+		int meD = nMotorEncoder[motorD];
+		int meE = nMotorEncoder[motorE];
+		int meF = nMotorEncoder[motorF];
+		int meG = nMotorEncoder[motorG];
+		int meH = nMotorEncoder[motorH];
+		int meI = nMotorEncoder[motorI];
 	}
-	motor[motorF] = 0;
-	motor[motorG] = 0;
-	motor[motorH] = 0;
-	motor[motorI] = 0;
 
 }
