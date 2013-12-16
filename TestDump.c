@@ -28,21 +28,10 @@ void liftTo(int encTarget, int threshold, int startPower, int endPower, int tilt
 
 	bool forward = encTarget > encCurr;
 
-	while (!(nMotorEncoder[motorE] < encTarget + threshold && nMotorEncoder[motorE] > encTarget - threshold))
+	while (!(nMotorEncoder[motorE] < encTarget + threshold && !forward) && !(nMotorEncoder[motorE] > encTarget - threshold && forward))
 	{
-		bool passed = false;
-		if (forward && nMotorEncoder[motorE] > encTarget)
-		{
-			passed = true;
-			powCurr = -30;
-		}
-		if (!forward && nMotorEncoder[motorE] < encTarget)
-		{
-			passed = true;
-			powCurr = 30;
-		}
 
-		if (nMotorEncoder[motorE] != encCurr && !passed) //Checks if encoder value moved and adjusts the power
+		if (nMotorEncoder[motorE] != encCurr)// && !passed) //Checks if encoder value moved and adjusts the power
 		{
 			powCurr += rate * abs(nMotorEncoder[motorE] - encCurr);
 			encCurr = nMotorEncoder[motorE];
@@ -53,10 +42,15 @@ void liftTo(int encTarget, int threshold, int startPower, int endPower, int tilt
 		else
 			motor[motorE] = powCurr;
 
-		if (abs(nMotorEncoder[motorE] - encStart) > 200)
+		if (abs(nMotorEncoder[motorE] - encStart) > 400)
 		{
 			motor[motorB] = tiltPower;
 			motor[motorC] = tiltPower;
+		}
+		else
+		{
+			motor[motorB] = tiltPower / -5;
+			motor[motorC] = tiltPower / -5;
 		}
 	}
 }
@@ -65,24 +59,21 @@ void liftTo(int encTarget, int threshold, int startPower, int endPower, int tilt
 task main()
 {
 
-	nMotorEncoder[motorE] = 0;
+	nMotorEncoder[motorE] = 0; //Reset encoders
 	nMotorEncoder[motorC] = 0;
-	liftTo(750, 20, 70, 10, 15);
-	motor[motorE] = -30;
-	wait10Msec(50);
-	motor[motorE] = 0;
-	wait10Msec(50);
-	while (!(nMotorEncoder[motorC] < -5))
+	liftTo(700, 25, 60, 15, 15); //Lifts steadily to encoder value 700
+	motor[motorE] = 15; //Continue into stopper
+	wait10Msec(110);
+	motor[motorE] = 0; //Stop the lift
+	while (!(nMotorEncoder[motorC] < -10)) //Dump blocks
 	{
 		motor[motorC] = -20;
 		motor[motorB] = -20;
-		motor[motorE] = -32;
 	}
-	motor[motorE] = 0;
 	motor[motorB] = 0;
 	motor[motorC] = 0;
 	wait10Msec(50);
-	liftTo(600, 80, 50, 10, 1);
+	liftTo(500, 80, 50, 10, 1);
 	motor[motorE] = 2;
 	wait10Msec(200);
 
